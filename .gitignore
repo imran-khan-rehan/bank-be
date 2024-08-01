@@ -18,9 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
- 
- .env
- /.env/
+.env
 \src\main\resources\config/application.properties
 
 ### NetBeans ###
