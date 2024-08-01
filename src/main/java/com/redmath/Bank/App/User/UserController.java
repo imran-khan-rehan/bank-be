@@ -38,7 +38,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user) {
         // Check if the user exists
         User existingUser = userService.findUser(userId);
-        if (existingUser == null) {
+        if (existingUser.getId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
@@ -64,7 +64,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         // Check if the user exists
         User existingUser = userService.findUser(userId);
-        if (existingUser == null) {
+        if (existingUser.getId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 

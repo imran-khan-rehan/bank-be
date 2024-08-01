@@ -36,4 +36,39 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
+  - changeSet:
+      id: 2
+      author: imran
+      context: h2
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: 'user@user.com'
+              - column:
+                  name: name
+                  value: 'user'
+              - column:
+                  name: password
+                  value: '$2a$12$oM/hqR2TGWbp1fQwlgH8t.nmGSy2AuKTz92ro/LPUiDkXA9IrK0fi'
+              - column:
+                  name: role
+                  value: 'USER'
 
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: 'admin@admin.com'
+              - column:
+                  name: name
+                  value: 'admin'
+              - column:
+                  name: password
+                  value: '$2a$12$oM/hqR2TGWbp1fQwlgH8t.nmGSy2AuKTz92ro/LPUiDkXA9IrK0fi'
+              - column:
+                  name: role
+                  value: 'ADMIN'

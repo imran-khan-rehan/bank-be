@@ -48,12 +48,10 @@ public class AuthService {
     public String registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        if(userRepository.findByEmail(user.getEmail()).getId() != null)
-        {
+        if (userRepository.findByEmail(user.getEmail()).getId() != null) {
             balanceService.createBalanceForUser(user.getEmail(), 0.0); // Set initial balance amount as needed
 
-        }
-        else {
+        } else {
             System.out.println("user not saved");
         }
 
