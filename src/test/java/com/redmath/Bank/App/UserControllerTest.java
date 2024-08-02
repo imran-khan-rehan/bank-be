@@ -175,7 +175,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void shouldReturnAllUsers() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/all")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/alls")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
