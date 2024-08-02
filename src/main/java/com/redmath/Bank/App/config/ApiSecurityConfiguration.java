@@ -53,7 +53,7 @@ public class ApiSecurityConfiguration {
          //   web.ignoring().requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET,"/swagger-ui/**"));
 
             for (String location : props.getIgnored().split(",")) {
-                System.out.println(location);
+
                 web.ignoring().requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, location));
             }
         };
@@ -109,7 +109,7 @@ public class ApiSecurityConfiguration {
                 })
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logout -> logout
-                        .logoutSuccessHandler(((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))));
+                        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK)));
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
