@@ -21,6 +21,11 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
+                  name: accountNumber
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+              - column:
                   name: name
                   type: VARCHAR(255)
                   constraints:
@@ -51,11 +56,15 @@ databaseChangeLog:
                   name: name
                   value: 'user'
               - column:
+                  name: accountNumber
+                  value: '1234567890'
+              - column:
                   name: password
                   value: '$2a$12$oM/hqR2TGWbp1fQwlgH8t.nmGSy2AuKTz92ro/LPUiDkXA9IrK0fi'
               - column:
                   name: role
                   value: 'USER'
+
 
         - insert:
             tableName: users
@@ -72,3 +81,6 @@ databaseChangeLog:
               - column:
                   name: role
                   value: 'ADMIN'
+              - column:
+                  name: accountNumber
+                  value: '1234567891'

@@ -72,7 +72,7 @@ public class User {
     }
 
     public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;  
+        this.accountNumber = accountNumber;
     }
 
     public String getEmail() {

@@ -125,7 +125,7 @@ class BalanceControllerTest {
     void setUp() {
         request = new HashMap<>();
         request.put("userId", 3L);
-        request.put("amount", 100.0);
+        request.put("amount", 200.0);
     }
 
     @Order(1)
