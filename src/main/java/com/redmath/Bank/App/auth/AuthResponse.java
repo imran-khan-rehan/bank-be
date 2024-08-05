@@ -9,6 +9,7 @@ public class AuthResponse {
     private String response;
     private Long id;
     private String role;
+    private String accountNumber;
     public AuthResponse(String response) {
         this.response = response;
     }
@@ -16,9 +17,11 @@ public class AuthResponse {
         this.response = response;
         this.id = id;
     }
-    public AuthResponse(String response, Long id, String role) {
+    public AuthResponse(String response, Long id, String role,String account) {
         this.response = response;
         this.id = id;
         this.role = role;
+        this.accountNumber=account;
+
     }
 }

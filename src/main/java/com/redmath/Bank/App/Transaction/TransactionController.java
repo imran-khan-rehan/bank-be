@@ -1,5 +1,6 @@
 package com.redmath.Bank.App.Transaction;
 
+import com.redmath.Bank.App.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,11 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Transaction transaction) {
-        boolean existingUser = transactionService.checkUserExist(transaction.getReceiver().getId());
-        if (!existingUser) {
+        User existingUser = transactionService.checkUserExist(transaction.getReceiver().getAccountNumber());
+        if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
+        transaction.getReceiver().setId(existingUser.getId());
         Transaction saved = transactionService.createTransaction(transaction);
         return ResponseEntity.ok(saved);
     }

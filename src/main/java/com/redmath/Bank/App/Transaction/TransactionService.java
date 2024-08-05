@@ -2,6 +2,7 @@ package com.redmath.Bank.App.Transaction;
 
 import com.redmath.Bank.App.Balance.Balance;
 import com.redmath.Bank.App.Balance.BalanceRepository;
+import com.redmath.Bank.App.User.User;
 import com.redmath.Bank.App.User.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class TransactionService {
         return transactionRepository.findBySenderIdOrReceiverId(userId, userId);
     }
 
-    public boolean checkUserExist(Long userId) {
-        return userService.findUser(userId).getId() != null;
+    public User checkUserExist(String account) {
+        return userService.findByAccountNumber(account);
     }
 
     @Transactional
