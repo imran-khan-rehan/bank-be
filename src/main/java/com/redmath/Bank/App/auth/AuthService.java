@@ -81,13 +81,13 @@ public String registerUser(User user) {
 
         // Proceed with balance creation
         if (userRepository.findByEmail(user.getEmail()).getId() != null) {
-            balanceService.createBalanceForUser(user.getEmail(), 0.0); // Set initial balance amount as needed
+            balanceService.createBalanceForUser(user.getEmail(), 0.0);
         } else {
             System.out.println("user not saved");
         }
     }
 
-    return jwtUtil.generateToken(user.getEmail());
+    return "success";
 }
 
 }
