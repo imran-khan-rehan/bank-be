@@ -47,7 +47,7 @@ public class AuthController {
         user.setRole("USER");
         return ResponseEntity.ok(authService.registerUser(user));
     }
-    
+
     public boolean validateUser(User user)
     {
         if(user.getEmail().trim().length() > 5 && user.getPassword().trim().length() > 7 && user.getName().trim().length() > 2)
