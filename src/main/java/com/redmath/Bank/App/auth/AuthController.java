@@ -33,12 +33,27 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-
+        if(!validateUser(user))
+        {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new AuthResponse("wrong data or empty "));
+        }
         if (userRepository.findByEmail(user.getEmail()) != null) {
             return ResponseEntity
                     .badRequest()
                     .body(new AuthResponse("User already exists"));
         }
-        return ResponseEntity.ok(new AuthResponse(authService.registerUser(user)));
+        user.setRole("USER");
+        return ResponseEntity.ok(authService.registerUser(user));
+    }
+    
+    public boolean validateUser(User user)
+    {
+        if(user.getEmail().trim().length() > 5 && user.getPassword().trim().length() > 7 && user.getName().trim().length() > 2)
+        {
+            return true;
+        }
+        return  false;
     }
 }
