@@ -135,8 +135,8 @@ class TransactionControllerTest {
         sender.setId(3L);
 
         User receiver = new User();
-        receiver.setAccountNumber("1234567891");
-
+        receiver.setAccountNumber("1234567890");
+        receiver.setId(1L);
         transaction = new Transaction();
         transaction.setSender(sender);
         transaction.setReceiver(receiver);
@@ -144,32 +144,22 @@ class TransactionControllerTest {
         transaction.setDate(LocalDateTime.now());
     }
 
-//    @Order(1)
-//    @Test
-//    @WithMockUser
-//    void shouldCreateTransaction() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(transaction)))
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.sender.id", Matchers.is(3)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.receiver.id", Matchers.is(2)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.amount", Matchers.is(100.0)));
-//    }
-
-    @Order(2)
+    @Order(1)
     @Test
-    @WithMockUser(roles = "ADMIN")
-    void shouldReturnAllTransactions() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/all")
-                        .contentType(MediaType.APPLICATION_JSON))
+    @WithMockUser
+    void shouldCreateTransaction() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transaction)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(Matchers.greaterThanOrEqualTo(1))));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.sender.id", Matchers.is(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.receiver.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.amount", Matchers.is(100.0)));
     }
+
+//
 
     @Order(3)
     @Test

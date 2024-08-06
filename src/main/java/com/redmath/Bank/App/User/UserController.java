@@ -36,21 +36,21 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user) {
-        // Check if the user exists
+
         User existingUser = userService.findUser(userId);
         if (existingUser.getId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        // Check if the email is being updated and if it already exists for another user
+
         if (!existingUser.getEmail().equals(user.getEmail()) && userService.alreadyRegister(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
         }
 
-        // Update user details
+
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());
-        // You can update other fields as needed
+
         if (user.getPassword() != null) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -59,16 +59,16 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    // Delete User API
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        // Check if the user exists
+
         User existingUser = userService.findUser(userId);
         if (existingUser.getId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // Delete the user
+
         userService.delete(userId);
         return ResponseEntity.noContent().build();
     }

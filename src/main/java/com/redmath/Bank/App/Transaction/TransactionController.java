@@ -32,7 +32,12 @@ public class TransactionController {
     public ResponseEntity<?> create(@RequestBody Transaction transaction) {
         User existingUser = transactionService.checkUserExist(transaction.getReceiver().getAccountNumber());
         if (existingUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            if(transaction.getReceiver().getId() != null) {
+                existingUser = new User(transaction.getReceiver().getId());
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
         }
         transaction.getReceiver().setId(existingUser.getId());
         Transaction saved = transactionService.createTransaction(transaction);

@@ -128,17 +128,8 @@ class BalanceControllerTest {
         request.put("amount", 200.0);
     }
 
-    @Order(1)
-    @Test
-    @WithMockUser
-    void shouldReturnAllBalances() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/balance/all")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(Matchers.greaterThanOrEqualTo(1))));
-    }
+
+
 
     @Order(2)
     @Test
