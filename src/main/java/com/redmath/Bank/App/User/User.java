@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.UniqueConstraint;
 
 import java.util.List;
 
@@ -45,12 +44,15 @@ public class User {
 
     }
     public User(User other) {
-        this.id = other.id;
-        this.accountNumber = other.accountNumber;
-        this.email = other.email;
-        this.name = other.name;
-        this.password = other.password;
-        this.role = other.role;
+        if(other != null){
+            this.id = other.id;
+            this.accountNumber = other.accountNumber;
+            this.email = other.email;
+            this.name = other.name;
+            this.password = other.password;
+            this.role = other.role;
+        }
+
 //        this.balances = other.balances;
 //        this.sentTransactions = other.sentTransactions;
 //        this.receivedTransactions = other.receivedTransactions;
