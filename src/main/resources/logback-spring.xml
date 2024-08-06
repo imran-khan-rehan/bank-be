@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- Define properties for log file paths -->
     <property name="LOG_HOME" value="./logs"/>
     <property name="APP_NAME" value="bankapp"/>
 
-    <!-- Console Appender for general output -->
-<!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
-<!--        <encoder>-->
-<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>-->
-<!--        </encoder>-->
-<!--    </appender>-->
-
-    <!-- File Appender for INFO level logs -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}-info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -45,7 +36,6 @@
         </filter>
     </appender>
 
-    <!-- File Appender for DEBUG level logs -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}-debug.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -62,7 +52,6 @@
         </filter>
     </appender>
 
-    <!-- File Appender for WARN level logs -->
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}-warn.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -79,9 +68,7 @@
         </filter>
     </appender>
 
-    <!-- Root logger configuration -->
     <root level="DEBUG">
-<!--        <appender-ref ref="CONSOLE"/>-->
         <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="WARN_FILE"/>
