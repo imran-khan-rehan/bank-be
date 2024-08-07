@@ -146,7 +146,53 @@ class TransactionControllerTest {
 
     @Order(1)
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldReturnAllTransactions() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Order(2)
+    @Test
+    @WithMockUser(roles = {"USER"})
+    void shouldReturnForbiddenWhenNonAdminAccessesGetAll() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/transactions/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+    @Order(3)
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldReturnNotFoundWhenUserDoesNotExist() throws Exception {
+        User sender = new User();
+        sender.setId(3L);
+
+        User receiver = new User();
+        receiver.setAccountNumber("7890");
+        receiver.setId(null);
+
+        // Create a transaction
+        Transaction transaction = new Transaction();
+        transaction.setSender(sender);
+        transaction.setReceiver(receiver);
+        transaction.setAmount(100.0);
+        transaction.setDate(LocalDateTime.now());
+
+        // Perform the request
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transaction)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().string("User not found"));
+    }
+
+
+    @Order(4)
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     void shouldCreateTransaction() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -159,9 +205,9 @@ class TransactionControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.amount", Matchers.is(100.0)));
     }
 
-//
 
-    @Order(3)
+
+    @Order(5)
     @Test
     @WithMockUser
     void shouldReturnTransactionsForUser() throws Exception {
@@ -173,3 +219,5 @@ class TransactionControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(Matchers.greaterThanOrEqualTo(1))));
     }
 }
+
+

@@ -45,8 +45,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(user)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.response",Matchers.notNullValue()));
+                .andExpect(MockMvcResultMatchers.content().string("success"));
     }
 
     @Order(2)

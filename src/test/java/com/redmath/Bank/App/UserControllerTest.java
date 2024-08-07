@@ -173,12 +173,12 @@ class UserControllerTest {
 
     @Order(1)
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void shouldReturnAllUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/alls")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print());
-
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Order(2)
@@ -234,7 +234,6 @@ class UserControllerTest {
                         .content(updatedUserJson))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
-//                .andExpect(MockMvcResultMatchers.content().string("User not found"));
     }
 
     @Order(5)
@@ -257,23 +256,23 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("Email already exists"));
     }
 
-//    @Order(6)
-//    @Test
-//    @WithMockUser
-//    void shouldDeleteUser() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/1")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isNoContent());
-//    }
-//
-//    @Order(7)
-//    @Test
-//    @WithMockUser
-//    void shouldReturnNotFoundWhenDeletingNonExistingUser() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/999")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isNotFound());
-//    }
+    @Order(6)
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldDeleteUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Order(7)
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldReturnNotFoundWhenDeletingNonExistingUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/users/999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

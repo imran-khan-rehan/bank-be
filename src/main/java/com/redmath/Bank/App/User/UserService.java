@@ -16,18 +16,33 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User or password incorrect.");
-        }
-        return new org.springframework.security.core.userdetails.User(
-                user.get().getEmail(),
-                user.get().getPassword(),
-                AuthorityUtils.commaSeparatedStringToAuthorityList(user.get().getRole())
-        );
+//    @Override
+//    public UserDetails loadUserByUsername(String email) {
+//        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+//        if (user.isEmpty()) {
+//            throw new UsernameNotFoundException("User or password incorrect.");
+//        }
+//        return new org.springframework.security.core.userdetails.User(
+//                user.get().getEmail(),
+//                user.get().getPassword(),
+//                AuthorityUtils.commaSeparatedStringToAuthorityList(user.get().getRole())
+//        );
+//    }
+@Override
+public UserDetails loadUserByUsername(String email) {
+    Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+    if (user.isEmpty()) {
+        throw new UsernameNotFoundException("User or password incorrect.");
     }
+    String rolePrefix = "ROLE_";
+    String roleWithPrefix = rolePrefix + user.get().getRole();
+    return new org.springframework.security.core.userdetails.User(
+            user.get().getEmail(),
+            user.get().getPassword(),
+            AuthorityUtils.commaSeparatedStringToAuthorityList(roleWithPrefix)
+    );
+}
+
 
     public User save(User user) {
         return userRepository.save(user);

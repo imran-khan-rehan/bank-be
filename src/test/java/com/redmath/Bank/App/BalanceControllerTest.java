@@ -129,7 +129,16 @@ class BalanceControllerTest {
     }
 
 
+    @Order(1)
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldReturnAllBalance() throws Exception {
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/balance/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+    }
 
     @Order(2)
     @Test
@@ -146,7 +155,7 @@ class BalanceControllerTest {
 
     @Order(3)
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     void shouldAddAmountToBalance() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/balance/add")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -24,7 +24,7 @@ public class BalanceController {
     @Autowired
     private BalanceService balanceService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<Balance>> getAll() {
         return ResponseEntity.ok(balanceService.getAll());
@@ -36,6 +36,7 @@ public class BalanceController {
         return ResponseEntity.ok(balance);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Balance> addAmount(@RequestBody Map<String, Object> request) {
         Long userId = ((Number) request.get("userId")).longValue();

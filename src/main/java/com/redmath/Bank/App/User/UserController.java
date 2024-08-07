@@ -24,11 +24,12 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/alls")
     public List<User> getAll() {
         return userService.findAll();
     }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getDetails(@PathVariable Long userId) {
@@ -60,7 +61,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 

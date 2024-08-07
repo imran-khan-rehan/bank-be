@@ -24,7 +24,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<Transaction>> getAll() {
         return ResponseEntity.ok(transactionService.getAll());
