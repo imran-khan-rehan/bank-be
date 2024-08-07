@@ -3,6 +3,7 @@ package com.redmath.Bank.App.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/alls")
     public List<User> getAll() {
         return userService.findAll();
@@ -59,7 +60,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 
