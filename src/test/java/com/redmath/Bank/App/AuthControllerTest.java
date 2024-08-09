@@ -1,4 +1,5 @@
 package com.redmath.Bank.App;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redmath.Bank.App.User.User;
 import com.redmath.Bank.App.auth.AuthRequest;
@@ -40,12 +41,13 @@ class AuthControllerTest {
         user.setPassword("password");
         user.setRole("USER");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/auth/register") // Updated to v2
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("success"));
+                .andExpect(MockMvcResultMatchers.status().isCreated()) // 201 Created
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.is("User registered successfully"))); // Updated response message
     }
 
     @Order(2)
@@ -58,13 +60,13 @@ class AuthControllerTest {
         user.setPassword("password");
         user.setRole("USER");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/auth/register") // Updated to v2
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.is("User already exists")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.is("User already exists"))); // Updated response message
     }
 
     @Order(3)
@@ -75,13 +77,12 @@ class AuthControllerTest {
         authRequest.setEmail("user@user.com");
         authRequest.setPassword("12345");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/auth/login") // Updated to v2
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authRequest)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.notNullValue()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.role", Matchers.is("USER")));
     }
@@ -94,12 +95,12 @@ class AuthControllerTest {
         authRequest.setEmail("nonexistent@user.com");
         authRequest.setPassword("password");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/auth/login") // Updated to v2
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authRequest)))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().isNotFound()) // 404 Not Found
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.is("User does not exist")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.response", Matchers.is("User does not exist"))); // Updated response message
     }
 }

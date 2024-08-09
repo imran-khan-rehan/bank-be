@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.Random;
 
 @Service
@@ -30,16 +31,8 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private BalanceService balanceService; // Inject BalanceService
+    private BalanceService balanceService;
 
-    private String generateUniqueAccountNumber(Long userId) {
-        // Generate a random 10-digit number
-        Random random = new Random();
-        int randomDigits = 1000000000 + random.nextInt(900000000); // Generates a number between 1000000000 and 9999999999
-
-        // Concatenate the user ID with the random number
-        return String.format("%010d", randomDigits) + userId;
-    }
     private static final int UNAUTHORIZED_STATUS = HttpStatus.UNAUTHORIZED.value();
 
     public ResponseEntity<?> authenticate(AuthRequest authRequest) throws Exception {
@@ -48,34 +41,39 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(UNAUTHORIZED_STATUS).body(new AuthResponse("password is wrong"));
+            return ResponseEntity.status(UNAUTHORIZED_STATUS).body(new AuthResponse("Incorrect password"));
         }
         User user = userRepository.findByEmail(authRequest.getEmail());
-        return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(authRequest.getEmail()), user.getId(), user.getRole(),user.getAccountNumber()));
+        return ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(authRequest.getEmail()), user.getId(), user.getRole(), user.getAccountNumber()));
     }
 
-public String registerUser(User user) {
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    userRepository.save(user);
-
-    // Generate a unique account number
-    Long userId = user.getId();
-    if (userId != null) {
-        String accountNumber = generateUniqueAccountNumber(userId);
-        user.setAccountNumber(accountNumber);
-
-        // Save user again to update account number
+    public String registerUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        // Proceed with balance creation
-        if (userRepository.findByEmail(user.getEmail()).getId() != null) {
-            balanceService.createBalanceForUser(user.getEmail(), 0.0);
-        } else {
-            System.out.println("user not saved");
+        // Generate a unique account number
+        Long userId = user.getId();
+        if (userId != null) {
+            String accountNumber = generateUniqueAccountNumber(userId);
+            user.setAccountNumber(accountNumber);
+
+            // Save user again to update account number
+            userRepository.save(user);
+
+            // Proceed with balance creation
+            if (userRepository.findByEmail(user.getEmail()).getId() != null) {
+                balanceService.createBalanceForUser(user.getEmail(), 0.0);
+            } else {
+                return "failure";
+            }
         }
+
+        return "success";
     }
 
-    return "success";
-}
-
+    private String generateUniqueAccountNumber(Long userId) {
+        Random random = new Random();
+        int randomDigits = 1000000000 + random.nextInt(900000000);
+        return String.format("%010d", randomDigits) + userId;
+    }
 }
